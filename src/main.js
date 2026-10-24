@@ -34,7 +34,12 @@ function render(focusId) {
     button.id = ['action', button.dataset.action, button.dataset.doc, button.dataset.page, button.dataset.slot].filter(value => value !== undefined).join('-');
   });
   if (previousFocus) {
-    const target = document.getElementById(previousFocus) || (previousFocus.startsWith('action-remove-') ? document.getElementById('action-add') || document.getElementById('step-title') : null);
+    let target = document.getElementById(previousFocus) || (previousFocus.startsWith('action-remove-') ? document.getElementById('action-add') || document.getElementById('step-title') : null);
+    if (target?.disabled && previousFocus === 'action-reset-slots') {
+      target = document.getElementById('slot-0');
+    } else if (target?.disabled && previousFocus.startsWith('action-clear-doc-')) {
+      target = document.getElementById(previousFocus.replace('action-clear-doc-', 'action-select-doc-'));
+    }
     target?.focus({ preventScroll: true });
   }
 }
